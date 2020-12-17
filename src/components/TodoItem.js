@@ -5,14 +5,34 @@ import { deleteTodo, updateTodo } from "./redux/actions";
 
 import "./TodoItem.css";
 
-const TodoItem = ({ todo }) => {
+const TodoItem = ({ todo, props }) => {
    const dispatch = useDispatch();
    const [editTodo, setEditTodo] = useState(false);
    const [todoName, setTodoName] = useState(todo.name);
 
+   const dragStart = (e) => {
+      const target = e.target;
+
+      e.dataTransfer.setData("card_id", target.id);
+
+      setTimeout(() => {
+         target.style.display = "none";
+      }, 0);
+   };
+
+   const dragOver = (e) => {
+      e.stopPropagation();
+   };
+
    return (
       <>
-         <div className="row mx-5 my-5 align-items-center" id="todo-list">
+         <div
+            className="row mx-5 my-5 align-items-center"
+            id="card1"
+            draggable="true"
+            onDragStart={dragStart}
+            onDragOver={dragOver}
+         >
             <div className="col-12 col-sm-12 col-md-6" style={{ color: "orange" }}>
                {editTodo ? (
                   <input
